@@ -1,29 +1,145 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   body {
-    @apply antialiased;
+    @apply antialiased transition-colors duration-300;
   }
 }
 
-@layer components {
-  .glass-panel {
-    @apply bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-xl shadow-xl;
-  }
+/* ============================================================
+   GLASS PANEL — rounded base, transitions
+   ============================================================ */
+.glass-panel {
+  @apply rounded-xl transition-all duration-300;
 }
 
-/* Custom Scrollbar for a premium feel */
+/* ============================================================
+   WC-CARD & WC-INNER-CARD
+   Semantic card classes whose bg/color are fully CSS-controlled.
+   No Tailwind dark: prefix dependency — .dark on <html> drives it.
+   ============================================================ */
+.wc-card {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+.wc-inner-card {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* ============================================================
+   DARK MODE OVERRIDES — these win via .dark ancestor specificity
+   All applied with !important to beat any Tailwind utilities
+   ============================================================ */
+
+/* Main page canvas */
+html.dark,
+html.dark body {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+/* Main content area */
+html.dark main {
+  background-color: #0f172a !important;
+}
+
+/* Glass panels */
+html.dark .glass-panel {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Semantic card classes */
+html.dark .wc-card {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark .wc-inner-card {
+  background-color: #162032 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Kill any Tailwind bg-white utility in dark mode */
+html.dark .bg-white,
+html.dark .bg-white\/80,
+html.dark .bg-white\/85 {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+/* Kill any slate-50 / slate-100 light backgrounds in dark mode */
+html.dark .bg-slate-50,
+html.dark .bg-slate-100,
+html.dark .bg-slate-100\/70 {
+  background-color: #0f172a !important;
+  color: #cbd5e1 !important;
+}
+
+/* Indigo tint panels in dark mode */
+html.dark .bg-indigo-50 {
+  background-color: #1e1b4b !important;
+}
+
+/* Amber/warning panels */
+html.dark .bg-amber-50 {
+  background-color: rgba(120, 53, 15, 0.3) !important;
+}
+
+/* ============================================================
+   LIGHT MODE OVERRIDES
+   ============================================================ */
+html.light .glass-panel,
+html:not(.dark) .glass-panel {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .wc-card,
+html:not(.dark) .wc-card {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html.light .wc-inner-card,
+html:not(.dark) .wc-inner-card {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-::-webkit-scrollbar-track {
-  background: #0f172a; 
+
+html.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
 }
-::-webkit-scrollbar-thumb {
-  background: #334155; 
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
   border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #475569; 
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
