@@ -4,6 +4,7 @@ import CycleStatus from './components/CycleStatus';
 import ApprovalQueue from './components/ApprovalQueue';
 import OutcomesSummary from './components/OutcomesSummary';
 import DataUpload from './components/DataUpload';
+import WorkingCapitalOverview from './components/WorkingCapitalOverview';
 import { getCycle } from './api';
 import {
   Database,
@@ -246,53 +247,58 @@ function App() {
               </div>
             ) : (
               /* Dashboard Section */
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-1 space-y-6">
-                  <CycleControl
-                    onCycleStarted={handleCycleStarted}
-                    cycleDate={cycleDate}
-                    setCycleDate={setCycleDate}
-                    cashUsd={cashUsd}
-                    setCashUsd={setCashUsd}
-                    overrideDq={overrideDq}
-                    setOverrideDq={setOverrideDq}
-                  />
-                </div>
+              <div className="space-y-6">
+                {/* Working Capital Ground Truth & AI Strategy Overview */}
+                <WorkingCapitalOverview cycleDate={cycleDate} />
 
-                <div className="lg:col-span-2 space-y-6">
-                  {!cycleData ? (
-                    <div className="glass-panel p-12 text-center flex flex-col items-center justify-center text-slate-400 border-dashed border-2 border-slate-700/50 bg-slate-900/20 rounded-xl">
-                      <Database size={48} className="mb-4 opacity-40 text-blue-400" />
-                      <h3 className="text-lg font-semibold text-slate-300">No Active Optimization Cycle</h3>
-                      <p className="text-sm opacity-70 max-w-md mt-1">
-                        Start a new cycle using the parameters panel on the left or upload fresh enterprise datasets in the Data Upload section.
-                      </p>
-                      <div className="mt-6 flex gap-3">
-                        <button
-                          onClick={() => setActiveSection('upload')}
-                          className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium border border-slate-700 transition-colors flex items-center gap-2"
-                        >
-                          <UploadCloud size={16} /> Go to Data Upload
-                        </button>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="lg:col-span-1 space-y-6">
+                    <CycleControl
+                      onCycleStarted={handleCycleStarted}
+                      cycleDate={cycleDate}
+                      setCycleDate={setCycleDate}
+                      cashUsd={cashUsd}
+                      setCashUsd={setCashUsd}
+                      overrideDq={overrideDq}
+                      setOverrideDq={setOverrideDq}
+                    />
+                  </div>
+
+                  <div className="lg:col-span-2 space-y-6">
+                    {!cycleData ? (
+                      <div className="glass-panel p-12 text-center flex flex-col items-center justify-center text-slate-400 border-dashed border-2 border-slate-700/50 bg-slate-900/20 rounded-xl">
+                        <Database size={48} className="mb-4 opacity-40 text-blue-400" />
+                        <h3 className="text-lg font-semibold text-slate-300">No Active Optimization Cycle</h3>
+                        <p className="text-sm opacity-70 max-w-md mt-1">
+                          Start a new cycle using the parameters panel on the left or upload fresh enterprise datasets in the Data Upload section.
+                        </p>
+                        <div className="mt-6 flex gap-3">
+                          <button
+                            onClick={() => setActiveSection('upload')}
+                            className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium border border-slate-700 transition-colors flex items-center gap-2"
+                          >
+                            <UploadCloud size={16} /> Go to Data Upload
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <>
-                      <CycleStatus data={cycleData} />
+                    ) : (
+                      <>
+                        <CycleStatus data={cycleData} />
 
-                      {cycleData.status === 'pending_approval' && cycleData.pending_approval && (
-                        <ApprovalQueue
-                          threadId={threadId}
-                          pendingApproval={cycleData.pending_approval}
-                          onApprovalComplete={handleApprovalComplete}
-                        />
-                      )}
+                        {cycleData.status === 'pending_approval' && cycleData.pending_approval && (
+                          <ApprovalQueue
+                            threadId={threadId}
+                            pendingApproval={cycleData.pending_approval}
+                            onApprovalComplete={handleApprovalComplete}
+                          />
+                        )}
 
-                      {cycleData.status === 'complete' && cycleData.outcomes_summary && (
-                        <OutcomesSummary summary={cycleData.outcomes_summary} />
-                      )}
-                    </>
-                  )}
+                        {cycleData.status === 'complete' && cycleData.outcomes_summary && (
+                          <OutcomesSummary summary={cycleData.outcomes_summary} />
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
