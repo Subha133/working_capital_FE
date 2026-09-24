@@ -17,14 +17,15 @@ import {
   ChevronRight,
   Bell,
   User,
-  Activity
+  Activity,
+  MessageSquare
 } from 'lucide-react';
 
 function App() {
   const [threadId, setThreadId] = useState(null);
   const [cycleData, setCycleData] = useState(null);
   const [isPolling, setIsPolling] = useState(false);
-  const [activeSection, setActiveSection] = useState('dashboard'); // 'dashboard' | 'upload'
+  const [activeSection, setActiveSection] = useState('dashboard'); // 'dashboard' | 'upload' | 'chat'
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Theme state: 'dark' | 'light'
@@ -152,7 +153,33 @@ function App() {
 
           {/* Navigation Links */}
           <nav className="p-3 space-y-2">
-            {/* Optimization Dashboard Tab */}
+            {/* 1st: Data Upload & Integration Tab */}
+            <div className="relative group">
+              <button
+                onClick={() => setActiveSection('upload')}
+                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl font-medium text-sm transition-all ${
+                  activeSection === 'upload'
+                    ? (theme === 'dark' ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30 shadow-sm' : 'bg-indigo-50 text-indigo-600 border border-indigo-200 shadow-sm')
+                    : (theme === 'dark' ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-transparent')
+                } ${isSidebarCollapsed ? 'justify-center px-0' : ''}`}
+              >
+                <UploadCloud size={20} className="shrink-0" />
+                {!isSidebarCollapsed && (
+                  <span className="truncate flex-1 text-left">Data Upload & Ingestion</span>
+                )}
+              </button>
+
+              {/* Tooltip on Collapsed State */}
+              {isSidebarCollapsed && (
+                <div className={`absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 text-xs font-medium rounded-md shadow-xl border whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 ${
+                  theme === 'dark' ? 'bg-slate-800 text-slate-200 border-slate-700' : 'bg-white text-slate-800 border-slate-200 shadow-md'
+                }`}>
+                  Data Upload & Ingestion
+                </div>
+              )}
+            </div>
+
+            {/* 2nd: Optimization Dashboard Tab */}
             <div className="relative group">
               <button
                 onClick={() => setActiveSection('dashboard')}
@@ -182,19 +209,19 @@ function App() {
               )}
             </div>
 
-            {/* Data Upload & Ingestion Tab */}
+            {/* 3rd: Talk To Your Data Tab */}
             <div className="relative group">
               <button
-                onClick={() => setActiveSection('upload')}
+                onClick={() => setActiveSection('chat')}
                 className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl font-medium text-sm transition-all ${
-                  activeSection === 'upload'
-                    ? (theme === 'dark' ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30 shadow-sm' : 'bg-indigo-50 text-indigo-600 border border-indigo-200 shadow-sm')
+                  activeSection === 'chat'
+                    ? (theme === 'dark' ? 'bg-violet-600/15 text-violet-400 border border-violet-500/30 shadow-sm' : 'bg-violet-50 text-violet-600 border border-violet-200 shadow-sm')
                     : (theme === 'dark' ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-transparent')
                 } ${isSidebarCollapsed ? 'justify-center px-0' : ''}`}
               >
-                <UploadCloud size={20} className="shrink-0" />
+                <MessageSquare size={20} className="shrink-0" />
                 {!isSidebarCollapsed && (
-                  <span className="truncate flex-1 text-left">Data Upload & Ingestion</span>
+                  <span className="truncate flex-1 text-left">Talk To Your Data</span>
                 )}
               </button>
 
@@ -203,7 +230,7 @@ function App() {
                 <div className={`absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 text-xs font-medium rounded-md shadow-xl border whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 ${
                   theme === 'dark' ? 'bg-slate-800 text-slate-200 border-slate-700' : 'bg-white text-slate-800 border-slate-200 shadow-md'
                 }`}>
-                  Data Upload & Ingestion
+                  Talk To Your Data
                 </div>
               )}
             </div>
@@ -316,6 +343,9 @@ function App() {
                   setActiveSection={setActiveSection}
                 />
               </div>
+            ) : activeSection === 'chat' ? (
+              /* Talk To Your Data Section */
+              <ChatPanel cycleDate={cycleDate} theme={theme} embedded />
             ) : (
               /* Dashboard Section */
               <div className="space-y-6">
@@ -382,7 +412,6 @@ function App() {
           </div>
         </main>
       </div>
-      <ChatPanel cycleDate={cycleDate} />
     </div>
   );
 }
