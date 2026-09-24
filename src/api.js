@@ -49,3 +49,16 @@ export const getCycleSummary = async (cycleDate) => {
   return response.data;
 };
 
+export const chatWithData = async (cycleDate, question, history) => {
+  const response = await api.post('/chat', {
+    cycle_date: cycleDate,
+    question,
+    history
+  });
+  return response.data;
+};
+
+export const getIndexStatus = async (cycleDate) => {
+  const response = await api.get(`/chat/index-status/${cycleDate}`);
+  return response.data;
+};

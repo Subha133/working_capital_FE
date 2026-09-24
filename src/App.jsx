@@ -5,6 +5,7 @@ import ApprovalQueue from './components/ApprovalQueue';
 import OutcomesSummary from './components/OutcomesSummary';
 import DataUpload from './components/DataUpload';
 import WorkingCapitalOverview from './components/WorkingCapitalOverview';
+import ChatPanel from './components/ChatPanel';
 import { getCycle } from './api';
 import {
   Database,
@@ -381,6 +382,7 @@ function App() {
           </div>
         </main>
       </div>
+      <ChatPanel cycleDate={cycleDate} />
     </div>
   );
 }
